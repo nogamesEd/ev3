@@ -3,24 +3,23 @@ from ev3dev2.motor import LargeMotor, OUTPUT_A
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
 from ev3dev2.sound import Sound
-from ev3dev2.led import Leds
 
 m = LargeMotor(OUTPUT_A)
-b1 = TouchSensor(INPUT_1)
-b2 = TouchSensor(INPUT_2)
+b2 = TouchSensor(INPUT_1)
+b1 = TouchSensor(INPUT_2)
 
 sound = Sound()
 
-sound.speak('Initialising positions on track. Please wait')
+sound.speak('Initialising')
 
-m.on(-30)
+m.on(-40)
 b1.wait_for_pressed()
 m.stop()
 m.reset()
 
-sound.speak('Reset position. Measuring track length')
+sound.speak('Reset position. Measuring length')
 
-m.on(30)
+m.on(40)
 b2.wait_for_pressed()
 m.stop()
 
