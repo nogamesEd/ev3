@@ -1,3 +1,7 @@
+#Currently moves 1 cm forward, waits till button at input 2 is pressed them moves to start
+#   Based on 1188 being the average for 25 cm or motion
+#   currently overshoots by 6 points, needs adjustment build in
+
 #!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, OUTPUT_A
 from ev3dev2.sensor import INPUT_1, INPUT_2
