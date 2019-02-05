@@ -14,7 +14,7 @@ input()
 
 length = m.position
 
-# 8 square y axis movement range
+# 8 square x axis movement range
 m.on_to_position(30, 0)
 
 m.wait_while('running')
