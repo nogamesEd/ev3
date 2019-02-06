@@ -1,7 +1,7 @@
 # ev3
 
-
 EV3 hardware control logic
+
 The codebase here is all the logic scripts so far!
 
 both xtest and ytest were the first & best verions of the code written to first get the lovely motors turning.
