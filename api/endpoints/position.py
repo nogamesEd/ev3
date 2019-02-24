@@ -90,7 +90,7 @@ class PositionResource(object):
         resp.body = json.dumps({
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mX.position * robotstate['Xmul']
+            'Xpos': mX.position() * robotstate['Xmul']
         })
     
     def on_get(self, req, resp):
@@ -110,5 +110,5 @@ class PositionResource(object):
         resp.body = json.dumps({
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mY.position * robotstate['Xmul']
+            'Xpos': mX.position() * robotstate['Xmul']
         })
