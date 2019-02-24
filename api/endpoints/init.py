@@ -4,6 +4,7 @@ import json
 from ev3dev2.motor import LargeMotor, OUTPUT_C, OUTPUT_D
 from state import robotstate
 from utils import Xmotors
+from time import sleep
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
@@ -23,19 +24,21 @@ class InitResource(object):
         # X axis initialisation
         print("Initialising robot X axis:")
         Xm = Xmotors()
-        Xm.on(30)
+        Xm.on(20)
         xhit = Xm.wait_for_limit()
+        Xm.stop()
+        sleep(0.5)
         Xm.reset()
-        Xm.on(-30)
+        Xm.on(-20)
         if xhit == 1:
             Xm.wait_for_limit(target=2)
         else:
             Xm.wait_for_limit(target=1)
 
         print('X axis track length is ' + str(Xm.position()))
-        Xm.on_to_position(30, int(Xm.position()/2))
-
         robotstate['Xmul'] = Xm.position()/robotstate['Xlength']
+        Xm.on_to_position(20, int(Xm.position()/2))
+
 
         # Y axis initialisation
         print('Initialising robot Y axis:')
@@ -50,9 +53,8 @@ class InitResource(object):
         input()
 
         print('Y axis length is ' + str(mY.position))
-        mY.on_to_position(30, int(mY.position/2))
-
         robotstate['Ymul'] = mY.position/robotstate['Ylength']
+        mY.on_to_position(20, int(mY.position/2))
 
         # Z axis initialisation
         print('Initialising robot Z axis:')
@@ -68,9 +70,7 @@ class InitResource(object):
 
         print('Z axis length is ' + str(mZ.position))
         mZ.on_to_position(30, int(mZ.position/2))
-
         robotstate['Zmul'] = mZ.position/robotstate['Zlength']
-
 
         robotstate['initialised'] = True
 
