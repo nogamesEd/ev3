@@ -119,5 +119,5 @@ class PositionResource(object):
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
             'Xpos': mX.position() * robotstate['Xmul'],
-            'Zpos': mZ.position() * robotstate['Zmul'],
+            'Zpos': mZ.position * robotstate['Zmul'],
         })
