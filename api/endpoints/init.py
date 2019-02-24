@@ -13,6 +13,9 @@ bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
 
 class InitResource(object):
+    def __init__(self, robotstate):
+        self.robotstate = robotstate
+
     def on_post(self, req, resp):
         """ POST /init: 
             Asks the hardware to reinitialise, reset tachometers from 
@@ -34,7 +37,7 @@ class InitResource(object):
         print('X axis track length is ' + str(mX.position))
         mX.on_to_position(30, int(mX.position/2))
 
-        self.options['Xmul'] = mX.position/self.options['Xlength']
+        self.robotstate['Xmul'] = mX.position/self.robotstate['Xlength']
 
         print('Initialising robot Y axis:')
 
@@ -50,15 +53,15 @@ class InitResource(object):
         print('Y axis length is ' + str(mY.position))
         mY.on_to_position(30, int(mY.position/2))
 
-        self.options['Ymul'] = mY.position/self.options['Ylength']
+        self.robotstate['Ymul'] = mY.position/self.robotstate['Ylength']
 
         resp.status = falcon.HTTP_200  # This is the default status
         resp.body = json.dumps({
             'success': True,
-            'Ylength': self.options['Ylength'],
-            'Xlength': self.options['Xlength'],
-            'Ypos': mY.position * self.options['Ymul'],
-            'Xpos': mY.position * self.options['Xmul'],
-            'Ymul': self.options['Ymul'],
-            'Xmul': self.options['Xmul']
+            'Ylength': self.robotstate['Ylength'],
+            'Xlength': self.robotstate['Xlength'],
+            'Ypos': mY.position * self.robotstate['Ymul'],
+            'Xpos': mY.position * self.robotstate['Xmul'],
+            'Ymul': self.robotstate['Ymul'],
+            'Xmul': self.robotstate['Xmul']
         })
