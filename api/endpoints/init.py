@@ -21,10 +21,10 @@ class InitResource(object):
 
         print("Initialising robot X axis:")
         Xm = Xmotors()
-        Xm.on(-30)
+        Xm.on(30)
         xhit = Xm.wait_for_limit()
         Xm.reset()
-        Xm.on(30)
+        Xm.on(-30)
         if xhit == 1:
             Xm.wait_for_limit(target=2)
         else:
