@@ -32,6 +32,7 @@ class Xmotors():
       while not bool(self.bX2.value()):
         pass
     self.stop()
+    return 1 if bool(self.bX1.value()) else 2
 
   def stop(self):
     self.mX1.stop()

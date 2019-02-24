@@ -22,10 +22,13 @@ class InitResource(object):
         print("Initialising robot X axis:")
         Xm = Xmotors()
         Xm.on(-30)
-        Xm.wait_for_limit()
+        xhit = Xm.wait_for_limit()
         Xm.reset()
         Xm.on(30)
-        Xm.wait_for_limit()
+        if xhit == 1:
+            Xm.wait_for_limit(target=2)
+        else:
+            Xm.wait_for_limit(target=1)
 
         print('X axis track length is ' + str(Xm.position()))
         Xm.on_to_position(30, int(Xm.position()/2))
