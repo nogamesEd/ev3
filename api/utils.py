@@ -38,10 +38,11 @@ class Xmotors():
     self.mX1.stop()
     self.mX2.stop()
   
-  def on_to_position(self, speed, position):
+  def on_to_position(self, speed, position, block=True):
     self.mX1.on_to_position(speed, position, block=False)
     self.mX2.on_to_position(speed, position, block=False)
-    self.wait_while('running')
+    if block:
+      self.wait_while('running')
 
   def reset(self):
     self.mX1.reset()

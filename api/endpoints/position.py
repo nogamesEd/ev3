@@ -85,9 +85,9 @@ class PositionResource(object):
         print("Moving gantry to {},{}.".format(targetX, targetY))
         print(json.dumps(robotstate))
 
-        mX.on_to_position(30, targetX * int(robotstate['Xmul']))
-        mY.on_to_position(30, targetY * int(robotstate['Ymul']))
-        mZ.on_to_position(30, targetZ * int(robotstate['Zmul']))
+        mX.on_to_position(30, targetX * robotstate['Xmul'], block=False)
+        mY.on_to_position(30, targetY * robotstate['Ymul'], block=False)
+        mZ.on_to_position(30, targetZ * robotstate['Zmul'], block=False)
 
         mX.wait_while('running')
         mY.wait_while('running')
@@ -98,7 +98,7 @@ class PositionResource(object):
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
             'Xpos': mX.position() * robotstate['Xmul'],
-            'Zpos': mZ.position() * robotstate['Zmul']
+            'Zpos': mZ.position * robotstate['Zmul']
         })
     
     def on_get(self, req, resp):
