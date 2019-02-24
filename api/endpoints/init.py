@@ -1,17 +1,14 @@
 import falcon
 import json
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
-from ev3dev2.sensor import INPUT_1, INPUT_2
-from ev3dev2.sensor.lego import TouchSensor
+
+from ev3dev2.motor import LargeMotor, OUTPUT_C
 from state import robotstate
+from utils import Xmotors
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
 
-mX = LargeMotor(OUTPUT_A)
-mY = LargeMotor(OUTPUT_B)
-bx1 = TouchSensor(INPUT_1)
-bx2 = TouchSensor(INPUT_2)
+mY = LargeMotor(OUTPUT_C)
 
 class InitResource(object):
     def on_post(self, req, resp):
@@ -21,21 +18,19 @@ class InitResource(object):
             when finished."""
 
         print("[POST] /init")
+
         print("Initialising robot X axis:")
+        Xm = Xmotors()
+        Xm.on(-30)
+        Xm.wait_for_limit()
+        Xm.reset()
+        Xm.on(30)
+        Xm.wait_for_limit()
 
-        # X-axis
-        mX.on(-30)
-        bx1.wait_for_pressed()
-        mX.stop()
-        mX.reset()
-        mX.on(30)
-        bx2.wait_for_pressed()
-        mX.stop()
+        print('X axis track length is ' + str(Xm.position()))
+        Xm.on_to_position(30, int(Xm.position()/2))
 
-        print('X axis track length is ' + str(mX.position))
-        mX.on_to_position(30, int(mX.position/2))
-
-        robotstate['Xmul'] = mX.position/robotstate['Xlength']
+        robotstate['Xmul'] = Xm.position()/robotstate['Xlength']
 
         print('Initialising robot Y axis:')
 
@@ -52,6 +47,8 @@ class InitResource(object):
         mY.on_to_position(30, int(mY.position/2))
 
         robotstate['Ymul'] = mY.position/robotstate['Ylength']
+
+        robotstate['initialised'] = True
 
         resp.status = falcon.HTTP_200  # This is the default status
         resp.body = json.dumps({

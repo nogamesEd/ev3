@@ -4,11 +4,12 @@ from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
+from utils import Xmotors
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
 
-mX = LargeMotor(OUTPUT_A)
+mX = Xmotors()
 mY = LargeMotor(OUTPUT_B)
 bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
