@@ -21,9 +21,16 @@ class Xmotors():
     self.mX1.on(speed)
     self.mX2.on(speed)
   
-  def wait_for_limit(self):
-    while not (self.bX1.value or self.bX2.value):
-      continue
+  def wait_for_limit(self, target=None):
+    if not target:
+      while not bool(self.bX1.value() or self.bX2.value()):
+        pass
+    elif target == 1:
+      while not bool(self.bX1.value()):
+        pass
+    elif target == 2:
+      while not bool(self.bX2.value()):
+        pass
     self.stop()
 
   def stop(self):
