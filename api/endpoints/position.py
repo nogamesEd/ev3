@@ -3,6 +3,7 @@ import json
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
+from app import robotstate
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
@@ -13,9 +14,6 @@ bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
 
 class PositionResource(object):
-    def __init__(self, robotstate):
-        self.robotstate = robotstate
-
     def on_post(self, req, resp):
         """ POST /position: 
             Asks the hardware to move the gantry to the requested position
@@ -23,7 +21,7 @@ class PositionResource(object):
 
         print("[POST] /position")
 
-        if not self.robotstate['initialised']:
+        if not robotstate['initialised']:
             print("[ERROR] 428: Robot not initalised. Cannot move yet.")
             raise falcon.HTTPPreconditionRequired(
                 title = "428: Robot not initialised",
@@ -67,8 +65,8 @@ class PositionResource(object):
                 })
             )
         
-        if (req.context.doc['x'] > self.robotstate['Xlength'] 
-                or req.context.doc['y'] > self.robotstate['Ylength']):
+        if (req.context.doc['x'] > robotstate['Xlength'] 
+                or req.context.doc['y'] > robotstate['Ylength']):
             print('[ERROR] 400: Requested location out of range.')
             raise falcon.HTTPBadRequest(
                 description = json.dumps({
@@ -82,23 +80,23 @@ class PositionResource(object):
 
         print("Moving gantry to {},{}.".format(targetX, targetY))
 
-        mX.on_to_position(30, targetX * self.robotstate['Xmul'])
-        mY.on_to_position(30, targetY * self.robotstate['Ymul'])
+        mX.on_to_position(30, targetX * robotstate['Xmul'])
+        mY.on_to_position(30, targetY * robotstate['Ymul'])
         mX.wait_while('running')
         mY.wait_while('running')
 
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
             'success': True,
-            'Ypos': mY.position * self.robotstate['Ymul'],
-            'Xpos': mY.position * self.robotstate['Xmul']
+            'Ypos': mY.position * robotstate['Ymul'],
+            'Xpos': mY.position * robotstate['Xmul']
         })
     
     def on_get(self, req, resp):
         """ GET /position: 
             Returns current gantry position."""
         
-        if not self.robotstate['initialised']:
+        if not robotstate['initialised']:
             print("[ERROR] 428: Robot not initalised. Cannot move yet.")
             raise falcon.HTTPPreconditionRequired(
                 title = "428: Robot not initialised",
@@ -110,6 +108,6 @@ class PositionResource(object):
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
             'success': True,
-            'Ypos': mY.position * self.robotstate['Ymul'],
-            'Xpos': mY.position * self.robotstate['Xmul']
+            'Ypos': mY.position * robotstate['Ymul'],
+            'Xpos': mY.position * robotstate['Xmul']
         })

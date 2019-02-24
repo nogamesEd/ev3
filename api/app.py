@@ -15,5 +15,5 @@ robotstate = {
 # define your routes
 api.add_route('/', default.DefaultResource())
 api.add_route('/ping', default.PingResource())
-api.add_route('/init', init.InitResource(robotstate))
-api.add_route('/position', position.PositionResource(robotstate))
+api.add_route('/init', init.InitResource())
+api.add_route('/position', position.PositionResource())
