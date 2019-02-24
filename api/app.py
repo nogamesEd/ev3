@@ -5,12 +5,6 @@ from endpoints import default, init, position
 
 # falcon.API instances are callable WSGI apps, initialise the app
 HardwareAPI = api = falcon.API()
-robotstate = {
-    'initialised': False,
-    'Xlength': 100,
-    'Ylength': 100,
-    'gripper': 'irobot'
-}
 
 # define your routes
 api.add_route('/', default.DefaultResource())
