@@ -1,6 +1,6 @@
 import falcon
 import json
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
+from ev3dev2.motor import LargeMotor, OUTPUT_C
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
@@ -82,8 +82,8 @@ class PositionResource(object):
         print("Moving gantry to {},{}.".format(targetX, targetY))
         print(json.dumps(robotstate))
 
-        mX.on_to_position(30, targetX * int(robotstate['Xmul']))
-        mY.on_to_position(30, targetY * int(robotstate['Ymul']))
+        mX.on_to_position(20, targetX * int(robotstate['Xmul']))
+        mY.on_to_position(20, targetY * int(robotstate['Ymul']))
         mX.wait_while('running')
         mY.wait_while('running')
 
