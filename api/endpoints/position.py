@@ -80,9 +80,10 @@ class PositionResource(object):
         targetY = r['y']
 
         print("Moving gantry to {},{}.".format(targetX, targetY))
+        print(json.dumps(robotstate))
 
-        mX.on_to_position(30, targetX * robotstate['Xmul'])
-        mY.on_to_position(30, targetY * robotstate['Ymul'])
+        mX.on_to_position(30, targetX * int(robotstate['Xmul']))
+        mY.on_to_position(30, targetY * int(robotstate['Ymul']))
         mX.wait_while('running')
         mY.wait_while('running')
 
