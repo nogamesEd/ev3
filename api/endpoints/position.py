@@ -47,7 +47,7 @@ class PositionResource(object):
             )
 
         try:
-            req.context['doc'] = json.loads(body.decode('utf-8'))
+            r = json.loads(body.decode('utf-8'))
         except (ValueError, UnicodeDecodeError):
             print("[ERROR] 400: Invalid JSON")
             raise falcon.HTTPBadRequest(
@@ -57,7 +57,7 @@ class PositionResource(object):
                 })
             )
 
-        if not ('x' in req.context['doc'] and 'y' in req.context['doc']):
+        if not ('x' in r and 'y' in r):
             print("[ERROR] 400: Missing x and y parameters in request.")
             raise falcon.HTTPBadRequest(
                 description = json.dumps({
@@ -66,8 +66,8 @@ class PositionResource(object):
                 })
             )
         
-        if (req.context.doc['x'] > robotstate['Xlength'] 
-                or req.context.doc['y'] > robotstate['Ylength']):
+        if (r['x'] > robotstate['Xlength'] 
+                or r['y'] > robotstate['Ylength']):
             print('[ERROR] 400: Requested location out of range.')
             raise falcon.HTTPBadRequest(
                 description = json.dumps({
@@ -76,8 +76,8 @@ class PositionResource(object):
                 })
             )
 
-        targetX = req.context.doc['x']
-        targetY = req.context.doc['y']
+        targetX = r['x']
+        targetY = r['y']
 
         print("Moving gantry to {},{}.".format(targetX, targetY))
 
@@ -90,7 +90,7 @@ class PositionResource(object):
         resp.body = json.dumps({
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mY.position * robotstate['Xmul']
+            'Xpos': mX.position * robotstate['Xmul']
         })
     
     def on_get(self, req, resp):
