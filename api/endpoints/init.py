@@ -34,9 +34,10 @@ class InitResource(object):
             Xm.wait_for_limit(target=1)
 
         print('X axis track length is ' + str(Xm.position()))
-        Xm.on_to_position(20, int(Xm.position()/2))
 
         robotstate['Xmul'] = Xm.position()/robotstate['Xlength']
+
+        Xm.on_to_position(20, int(Xm.position()/2))
 
         print('Initialising robot Y axis:')
 
@@ -50,9 +51,10 @@ class InitResource(object):
         input()
 
         print('Y axis length is ' + str(mY.position))
-        mY.on_to_position(20, int(mY.position/2))
 
         robotstate['Ymul'] = mY.position/robotstate['Ylength']
+
+        mY.on_to_position(20, int(mY.position/2))
 
         robotstate['initialised'] = True
 
