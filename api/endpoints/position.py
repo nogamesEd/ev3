@@ -10,7 +10,7 @@ from utils import Xmotors
 # into smaller files at some point.
 
 mX = Xmotors()
-mY = LargeMotor(OUTPUT_B)
+mY = LargeMotor(OUTPUT_C)
 bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
 
