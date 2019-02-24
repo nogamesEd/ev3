@@ -1,7 +1,7 @@
 import falcon
 import json
 
-from ev3dev2.motor import LargeMotor, OUTPUT_C, OUTPUT_D
+from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_C, OUTPUT_D
 from state import robotstate
 from utils import Xmotors
 from time import sleep
@@ -10,7 +10,7 @@ from time import sleep
 # into smaller files at some point.
 
 mY = LargeMotor(OUTPUT_C)
-mZ = LargeMotor(OUTPUT_D)
+mZ = MediumMotor(OUTPUT_D)
 
 class InitResource(object):
     def on_post(self, req, resp):
