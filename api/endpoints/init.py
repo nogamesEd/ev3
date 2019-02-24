@@ -69,8 +69,8 @@ class InitResource(object):
         input()
 
         print('Z axis length is ' + str(mZ.position))
-        mZ.on_to_position(30, int(mZ.position/2))
         robotstate['Zmul'] = mZ.position/robotstate['Zlength']
+        mZ.on_to_position(30, int(mZ.position/2))
 
         robotstate['initialised'] = True
 
