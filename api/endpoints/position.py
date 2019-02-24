@@ -1,6 +1,6 @@
 import falcon
 import json
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
+from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
@@ -11,6 +11,7 @@ from utils import Xmotors
 
 mX = Xmotors()
 mY = LargeMotor(OUTPUT_C)
+mZ = LargeMotor(OUTPUT_D)
 bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
 
@@ -57,17 +58,18 @@ class PositionResource(object):
                 })
             )
 
-        if not ('x' in r and 'y' in r):
-            print("[ERROR] 400: Missing x and y parameters in request.")
+        if not ('x' in r and 'y' in r and 'z' in r):
+            print("[ERROR] 400: Missing x and y and z parameters in request.")
             raise falcon.HTTPBadRequest(
                 description = json.dumps({
                 'success': False,
-                'error': 'Missing x and y parameters in request body.'
+                'error': 'Missing x and y and z parameters in request body.'
                 })
             )
         
         if (r['x'] > robotstate['Xlength'] 
-                or r['y'] > robotstate['Ylength']):
+                or r['y'] > robotstate['Ylength']
+                    or r['z'] > robotstate['Zlength']):
             print('[ERROR] 400: Requested location out of range.')
             raise falcon.HTTPBadRequest(
                 description = json.dumps({
@@ -78,20 +80,25 @@ class PositionResource(object):
 
         targetX = r['x']
         targetY = r['y']
+        targetZ = r['z']
 
         print("Moving gantry to {},{}.".format(targetX, targetY))
         print(json.dumps(robotstate))
 
         mX.on_to_position(30, targetX * int(robotstate['Xmul']))
         mY.on_to_position(30, targetY * int(robotstate['Ymul']))
+        mZ.on_to_position(30, targetZ * int(robotstate['Zmul']))
+
         mX.wait_while('running')
         mY.wait_while('running')
+        mZ.wait_while('running')
 
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mX.position() * robotstate['Xmul']
+            'Xpos': mX.position() * robotstate['Xmul'],
+            'Zpos': mZ.position() * robotstate['Zmul']
         })
     
     def on_get(self, req, resp):
@@ -111,5 +118,6 @@ class PositionResource(object):
         resp.body = json.dumps({
             'success': True,
             'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mX.position() * robotstate['Xmul']
+            'Xpos': mX.position() * robotstate['Xmul'],
+            'Zpos': mZ.position() * robotstate['Zmul'],
         })

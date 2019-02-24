@@ -1,7 +1,7 @@
 import falcon
 import json
 
-from ev3dev2.motor import LargeMotor, OUTPUT_C
+from ev3dev2.motor import LargeMotor, OUTPUT_C, OUTPUT_D
 from state import robotstate
 from utils import Xmotors
 
@@ -9,6 +9,7 @@ from utils import Xmotors
 # into smaller files at some point.
 
 mY = LargeMotor(OUTPUT_C)
+mZ = LargeMotor(OUTPUT_D)
 
 class InitResource(object):
     def on_post(self, req, resp):
@@ -19,6 +20,7 @@ class InitResource(object):
 
         print("[POST] /init")
 
+        # X axis initialisation
         print("Initialising robot X axis:")
         Xm = Xmotors()
         Xm.on(30)
@@ -35,6 +37,7 @@ class InitResource(object):
 
         robotstate['Xmul'] = Xm.position()/robotstate['Xlength']
 
+        # Y axis initialisation
         print('Initialising robot Y axis:')
 
         mY.reset()
@@ -50,6 +53,24 @@ class InitResource(object):
         mY.on_to_position(30, int(mY.position/2))
 
         robotstate['Ymul'] = mY.position/robotstate['Ylength']
+
+        # Z axis initialisation
+        print('Initialising robot Z axis:')
+
+        mZ.reset()
+        print("Move gripper to home and press return")
+        input()
+
+        mZ.reset()
+
+        print("Move gripper to end and press return")
+        input()
+
+        print('Z axis length is ' + str(mZ.position))
+        mZ.on_to_position(30, int(mZ.position/2))
+
+        robotstate['Zmul'] = mZ.position/robotstate['Zlength']
+
 
         robotstate['initialised'] = True
 
