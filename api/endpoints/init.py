@@ -3,7 +3,7 @@ import json
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
-from app import robotstate
+from ..app import robotstate
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
