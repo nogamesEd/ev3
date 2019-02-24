@@ -1,6 +1,6 @@
 import falcon
 import json
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
+from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
 from ev3dev2.sensor import INPUT_1, INPUT_2
 from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
@@ -11,7 +11,7 @@ from utils import Xmotors
 
 mX = Xmotors()
 mY = LargeMotor(OUTPUT_C)
-mZ = LargeMotor(OUTPUT_D)
+mZ = MediumMotor(OUTPUT_D)
 bx1 = TouchSensor(INPUT_1)
 bx2 = TouchSensor(INPUT_2)
 
