@@ -54,3 +54,16 @@ class Xmotors():
   def wait_while(self, action):
     self.mX1.wait_while(action)
     self.mX2.wait_while(action)
+
+def wait_for_limit(b1, b2, motor, target=None):
+    if not target:
+      while not bool(b1.value() or b2.value()):
+        pass
+    elif target == 1:
+      while not bool(b1.value()):
+        pass
+    elif target == 2:
+      while not bool(b2.value()):
+        pass
+    motor.stop()
+    return 1 if bool(b1.value()) else 2
