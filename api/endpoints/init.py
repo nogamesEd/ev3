@@ -2,7 +2,7 @@ import falcon
 import json
 
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_C, OUTPUT_D
-from ev3dev2.sensor import INPUT_3, INPUT_4
+from ev3dev2.sensor import INPUT_1, INPUT_2, INPUT_3, INPUT_4
 from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
 from utils import Xmotors, wait_for_limit
@@ -12,6 +12,8 @@ from time import sleep
 # into smaller files at some point.
 
 Ym = LargeMotor(OUTPUT_C)
+bX1 = TouchSensor(INPUT_1)
+bX2 = TouchSensor(INPUT_2)
 bY1 = TouchSensor(INPUT_3)
 bY2 = TouchSensor(INPUT_4)
 Zm = MediumMotor(OUTPUT_D)
@@ -27,6 +29,13 @@ class InitResource(object):
 
         # X axis initialisation
         print("Initialising robot X axis:")
+
+        if (bX1.value == 1) or (bX2.value == 1):
+            print('[ERROR] 500: Limit switch already pressed. Unable to reset.')
+            raise falcon.HTTPInternalServerError(
+                description = 'Limit switch already pressed'
+            )
+
         Xm = Xmotors()
         Xm.on(20)
         xhit = Xm.wait_for_limit()
@@ -46,6 +55,12 @@ class InitResource(object):
 
         # Y axis initialisation
         print('Initialising robot Y axis:')
+
+        if (bY1.value == 1) or (bY2.value == 1):
+            print('[ERROR] 500: Limit switch already pressed. Unable to reset.')
+            raise falcon.HTTPInternalServerError(
+                description = 'Limit switch already pressed'
+            )
 
         Ym.on(20)
         yhit = wait_for_limit(bY1, bY2, Ym)
