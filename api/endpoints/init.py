@@ -2,15 +2,19 @@ import falcon
 import json
 
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_C, OUTPUT_D
+from ev3dev2.sensor import INPUT_3, INPUT_4
+from ev3dev2.sensor.lego import TouchSensor
 from state import robotstate
-from utils import Xmotors
+from utils import Xmotors, wait_for_limit
 from time import sleep
 
 # Falcon resource class for robot control, probably ought to be split
 # into smaller files at some point.
 
-mY = LargeMotor(OUTPUT_C)
-mZ = MediumMotor(OUTPUT_D)
+Ym = LargeMotor(OUTPUT_C)
+bY1 = TouchSensor(INPUT_3)
+bY2 = TouchSensor(INPUT_4)
+Zm = MediumMotor(OUTPUT_D)
 
 class InitResource(object):
     def on_post(self, req, resp):
@@ -43,34 +47,36 @@ class InitResource(object):
         # Y axis initialisation
         print('Initialising robot Y axis:')
 
-        mY.reset()
-        print("Move carriage to home and press return")
-        input()
+        Ym.on(20)
+        yhit = wait_for_limit(bY1, bY2, Ym)
+        Ym.stop()
+        sleep(0.5)
+        Ym.reset()
+        Ym.on(-20)
+        if yhit == 1:
+            wait_for_limit(bY1, bY2, Ym, target=2)
+        else:
+            wait_for_limit(bY1, bY2, Ym, target=1)
 
-        mY.reset()
-
-        print("Move carriage to end and press return")
-        input()
-
-        print('Y axis length is ' + str(mY.position))
-        robotstate['Ymul'] = mY.position/robotstate['Ylength']
-        mY.on_to_position(20, int(mY.position/2))
+        print('Y axis track length is ' + str(Ym.position))
+        robotstate['Ymul'] = Ym.position/robotstate['Ylength']
+        Ym.on_to_position(20, int(Ym.position/2))
 
         # Z axis initialisation
         print('Initialising robot Z axis:')
 
-        mZ.reset()
+        Zm.reset()
         print("Move gripper to home and press return")
         input()
 
-        mZ.reset()
+        Zm.reset()
 
         print("Move gripper to end and press return")
         input()
 
-        print('Z axis length is ' + str(mZ.position))
-        robotstate['Zmul'] = mZ.position/robotstate['Zlength']
-        mZ.on_to_position(30, int(mZ.position/2))
+        print('Z axis length is ' + str(Zm.position))
+        robotstate['Zmul'] = Zm.position/robotstate['Zlength']
+        Zm.on_to_position(30, int(Zm.position/2))
 
         robotstate['initialised'] = True
 
@@ -79,8 +85,8 @@ class InitResource(object):
             'success': True,
             'Ylength': robotstate['Ylength'],
             'Xlength': robotstate['Xlength'],
-            'Ypos': mY.position * robotstate['Ymul'],
-            'Xpos': mY.position * robotstate['Xmul'],
+            'Ypos': Ym.position * robotstate['Ymul'],
+            'Xpos': Ym.position * robotstate['Xmul'],
             'Ymul': robotstate['Ymul'],
             'Xmul': robotstate['Xmul']
         })
