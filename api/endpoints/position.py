@@ -82,7 +82,7 @@ class PositionResource(object):
         targetY = r['y']
         targetZ = r['z']
 
-        print("Moving gantry to {},{}.".format(targetX, targetY))
+        print("Moving gantry to {},{},{}.".format(targetX, targetY, targetZ))
         print(json.dumps(robotstate))
 
         mX.on_to_position(30, targetX * robotstate['Xmul'], block=False)
