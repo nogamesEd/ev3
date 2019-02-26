@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Nasty WSGI startup stuff, stolen from https://www.khalidalnajjar.com/developing-blazing-fast-website-python-using-falcon-bjoern/
 # Probably not worth touching. Take a look at app.py instead.
 
