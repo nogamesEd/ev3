@@ -1,4 +1,5 @@
 import falcon
+import json
 
 # Falcon follows the REST architectural style, meaning (among
 # other things) that you think in terms of resources and state
@@ -15,4 +16,4 @@ class PingResource(object):
     def on_get(self, req, resp):
         """Handles GET requests"""
         resp.status = falcon.HTTP_200  # This is the default status
-        resp.body = "Pong"
+        resp.body = json.dumps({"success": True, "message": "pong"})

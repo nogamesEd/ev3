@@ -3,5 +3,5 @@ robotstate = {
     'Xlength': 100,
     'Ylength': 100,
     'Zlength': 100,
-    'gripper': 'irobot'
+    'gripper': "grab"
 }
