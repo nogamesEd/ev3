@@ -29,16 +29,3 @@ class ValidateRequest(object):
                 'error': 'Request missing body.'
                 })
             )
-        
-        # Try to validate JSON
-        body = req.stream.read()
-        try:
-            r = json.loads(body.decode('utf-8'))
-        except (ValueError, UnicodeDecodeError):
-            print("[ERROR] 400: Invalid JSON")
-            raise falcon.HTTPBadRequest(
-                description = json.dumps({
-                'success': False,
-                'error': 'Invalid JSON in body. Check request is UTF-8 encoded.'
-                })
-            )

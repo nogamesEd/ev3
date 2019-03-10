@@ -9,10 +9,12 @@ class GripperResource(object):
     def on_post(self, req, resp):
         """ POST /gripper: 
             Grabs the piece."""
+        
+        body = req.stream.read()
+        body = json.loads(body.decode('utf-8'))
 
-        body = json.load(req.stream)
-
-        Gm.on_to_position(30, 0 if body["move"]=="grab" else 400, block=False)
+        print("Moving gripper to position {}".format(body["move"]))
+        Gm.on_to_position(30, body["move"], block=False)
         Gm.wait_while('running')
 
         resp.status = falcon.HTTP_200

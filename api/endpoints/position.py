@@ -18,6 +18,8 @@ class PositionResource(object):
             in mm."""
 
         body = req.stream.read()
+        print(body)
+        r = json.loads(body.decode('utf-8'))
 
         if not ('x' in r and 'y' in r and 'z' in r):
             print("[ERROR] 400: Missing x and y and z parameters in request.")

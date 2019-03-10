@@ -2,7 +2,8 @@ import falcon
 
 # Import your endpoint classes:
 from endpoints import middleware, default
-from endpoints import gripper, init, position
+from endpoints import gripper
+from endpoints import init, position
 
 # falcon.API instances are callable WSGI apps, initialise the app
 HardwareAPI = api = falcon.API(middleware=middleware.ValidateRequest())
