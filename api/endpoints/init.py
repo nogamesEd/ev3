@@ -19,23 +19,17 @@ class InitResource(object):
             limit switches and return to home position. Request completes 
             when finished."""
 
-        ### TODO: X axis initialisation
-        # print("Initialising robot X axis:")
-        # Xm.on(20)
-        # xhit = Xm.wait_for_limit()
-        # Xm.stop()
-        # sleep(0.5)
-        # Xm.reset()
-        # Xm.on(-20)
-        # if xhit == 1:
-        #     Xm.wait_for_limit(target=2)
-        # else:
-        #     Xm.wait_for_limit(target=1)
-        # print('X axis track length is ' + str(Xm.position()))
-        robotstate['Xmul'] = 0 # Xm.position()/robotstate['Xlength']
-        # Xm.on_to_position(20, int(Xm.position()/2))
-        ###
-
+        # X axis initialisation
+        print("Initialising robot X axis:")
+        Xm.reset()
+        print("Move Y-axis to one end and press return")
+        input()
+        Xm.reset()
+        print("Move X-axis to other end and press return")
+        input()
+        print('X axis track length is ' + str(Xm.position))
+        robotstate['Xmul'] = Xm.position/robotstate['Xlength']
+        Xm.on_to_position(20, int(Xm.position/2))
 
         # Y axis initialisation
         print('Initialising robot Y axis:')
