@@ -1,5 +1,6 @@
 import falcon
 import json
+import time
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
 from state import robotstate
 from time import sleep
@@ -22,35 +23,44 @@ class InitResource(object):
         # X axis initialisation
         print("Initialising robot X axis:")
         Xm.reset()
-        print("Move Y-axis to one end and press return")
+        Xm.run_forever(speed_sp=40)
         input()
+        Xm.stop(stop_action="hold")
+        time.sleep(0.5)
         Xm.reset()
-        print("Move X-axis to other end and press return")
+        Xm.run_forever(speed_sp=-40)
         input()
+        Xm.stop(stop_action="hold")
         print('X axis track length is ' + str(Xm.position))
         robotstate['Xmul'] = Xm.position/robotstate['Xlength']
         Xm.on_to_position(20, int(Xm.position/2))
 
         # Y axis initialisation
         print('Initialising robot Y axis:')
-        print("Move Y-axis to one end and press return")
         Ym.reset() # Reset in order to release breaks
+        Ym.run_forever(speed_sp=40)
         input()
+        Ym.stop(stop_action="hold")
+        time.sleep(0.5)
         Ym.reset()
-        print("Move Y-axis to end and press return")
+        Ym.run_forever(speed_sp=-40)
         input()
+        Ym.stop(stop_action="hold")
         print('Y axis track length is ' + str(Ym.position))
         robotstate['Ymul'] = Ym.position/robotstate['Ylength']
         Ym.on_to_position(20, int(Ym.position/2))
 
         # Z axis initialisation
         print('Initialising robot Z axis:')
-        print("Move gripper to home and press return")
         Zm.reset() # Reset in order to release breaks
+        Zm.run_forever(speed_sp=40)
         input()
+        Zm.stop(stop_action="hold")
+        time.sleep(0.5)
         Zm.reset()
-        print("Move gripper to end and press return")
+        Zm.run_forever(speed_sp=-40)
         input()
+        Zm.stop(stop_action="hold")
         print('Z axis length is ' + str(Zm.position))
         robotstate['Zmul'] = Zm.position/robotstate['Zlength']
         Zm.on_to_position(30, int(Zm.position/2))
