@@ -52,9 +52,9 @@ class PositionResource(object):
         Ym.on_to_position(30, targetY * robotstate['Ymul'], block=False)
         Zm.on_to_position(30, targetZ * robotstate['Zmul'], block=False)
 
-        Xm.wait_while('running')
-        Ym.wait_while('running')
-        Zm.wait_while('running')
+        Xm.wait_while('running', timeout=2000)
+        Ym.wait_while('running', timeout=2000)
+        Zm.wait_while('running', timeout=2000)
 
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({
