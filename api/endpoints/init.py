@@ -2,6 +2,7 @@ import falcon
 import json
 import time
 from ev3dev2.motor import LargeMotor, MediumMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
+from ev3dev.ev3 import TouchSensor, INPUT_1
 from state import robotstate
 from time import sleep
 
@@ -12,6 +13,7 @@ Xm = LargeMotor(OUTPUT_A)
 Ym = LargeMotor(OUTPUT_B)
 Zm = MediumMotor(OUTPUT_C)
 Gm = MediumMotor(OUTPUT_D)
+Ts = TouchSensor(INPUT_1)
 
 class InitResource(object):
     def on_post(self, req, resp):
@@ -23,13 +25,15 @@ class InitResource(object):
         # X axis initialisation
         print("Initialising robot X axis:")
         Xm.reset()
-        Xm.run_forever(speed_sp=40)
-        input()
+        Xm.run_forever(speed_sp=80)
+        while not Ts.value():
+            pass
         Xm.stop(stop_action="hold")
         time.sleep(0.5)
         Xm.reset()
-        Xm.run_forever(speed_sp=-40)
-        input()
+        Xm.run_forever(speed_sp=-80)
+        while not Ts.value():
+            pass
         Xm.stop(stop_action="hold")
         print('X axis track length is ' + str(Xm.position))
         robotstate['Xmul'] = Xm.position/robotstate['Xlength']
@@ -38,13 +42,15 @@ class InitResource(object):
         # Y axis initialisation
         print('Initialising robot Y axis:')
         Ym.reset() # Reset in order to release breaks
-        Ym.run_forever(speed_sp=40)
-        input()
+        Ym.run_forever(speed_sp=80)
+        while not Ts.value():
+            pass
         Ym.stop(stop_action="hold")
         time.sleep(0.5)
         Ym.reset()
-        Ym.run_forever(speed_sp=-40)
-        input()
+        Ym.run_forever(speed_sp=-80)
+        while not Ts.value():
+            pass
         Ym.stop(stop_action="hold")
         print('Y axis track length is ' + str(Ym.position))
         robotstate['Ymul'] = Ym.position/robotstate['Ylength']
@@ -53,18 +59,26 @@ class InitResource(object):
         # Z axis initialisation
         print('Initialising robot Z axis:')
         Zm.reset() # Reset in order to release breaks
-        Zm.run_forever(speed_sp=40)
-        input()
+        Zm.run_forever(speed_sp=80)
+        while not Ts.value():
+            pass
         Zm.stop(stop_action="hold")
         time.sleep(0.5)
         Zm.reset()
-        Zm.run_forever(speed_sp=-40)
-        input()
+        Zm.run_forever(speed_sp=-80)
+        while not Ts.value():
+            pass
         Zm.stop(stop_action="hold")
         print('Z axis length is ' + str(Zm.position))
         robotstate['Zmul'] = Zm.position/robotstate['Zlength']
         Zm.on_to_position(30, int(Zm.position/2))
 
+        # Gripper initialisation
+        print('Initialising the gripper:')
+        while not Ts.value():
+            pass
+        Gm.reset()
+        
         robotstate['initialised'] = True
 
         resp.status = falcon.HTTP_200  # This is the default status
