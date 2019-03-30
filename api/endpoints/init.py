@@ -25,13 +25,13 @@ class InitResource(object):
         # X axis initialisation
         print("Initialising robot X axis:")
         Xm.reset()
-        Xm.run_forever(speed_sp=80)
+        Xm.run_forever(speed_sp=100)
         while not Ts.value():
             pass
         Xm.stop(stop_action="hold")
         time.sleep(0.5)
         Xm.reset()
-        Xm.run_forever(speed_sp=-80)
+        Xm.run_forever(speed_sp=-100)
         while not Ts.value():
             pass
         Xm.stop(stop_action="hold")
@@ -42,13 +42,13 @@ class InitResource(object):
         # Y axis initialisation
         print('Initialising robot Y axis:')
         Ym.reset() # Reset in order to release breaks
-        Ym.run_forever(speed_sp=80)
+        Ym.run_forever(speed_sp=100)
         while not Ts.value():
             pass
         Ym.stop(stop_action="hold")
         time.sleep(0.5)
         Ym.reset()
-        Ym.run_forever(speed_sp=-80)
+        Ym.run_forever(speed_sp=-100)
         while not Ts.value():
             pass
         Ym.stop(stop_action="hold")
@@ -59,13 +59,13 @@ class InitResource(object):
         # Z axis initialisation
         print('Initialising robot Z axis:')
         Zm.reset() # Reset in order to release breaks
-        Zm.run_forever(speed_sp=80)
+        Zm.run_forever(speed_sp=100)
         while not Ts.value():
             pass
         Zm.stop(stop_action="hold")
         time.sleep(0.5)
         Zm.reset()
-        Zm.run_forever(speed_sp=-80)
+        Zm.run_forever(speed_sp=-100)
         while not Ts.value():
             pass
         Zm.stop(stop_action="hold")
@@ -80,6 +80,13 @@ class InitResource(object):
         Gm.reset()
         
         robotstate['initialised'] = True
+
+        Xm.on_to_position(20, 100 * robotstate['Xmul'], block=False)
+        Zm.on_to_position(20, 0 * robotstate['Zmul'], block=False)
+
+        Xm.wait_while('running', timeout=4000)
+        Ym.wait_while('running', timeout=4000)
+        Zm.wait_while('running', timeout=4000)
 
         resp.status = falcon.HTTP_200  # This is the default status
         resp.body = json.dumps({
