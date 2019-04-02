@@ -12,10 +12,10 @@ class GripperResource(object):
         
         body = req.stream.read()
         body = json.loads(body.decode('utf-8'))
-
+        
         print("Moving gripper to position {}".format(body["move"]))
-        Gm.on_to_position(30, body["move"], block=False)
-        Gm.wait_while('running', timeout=2000)
+        Gm.on_to_position(30, body["move"] * robotstate["Gmul"], block=False)
+        Gm.wait_while('running', timeout=3000)
 
         resp.status = falcon.HTTP_200
         resp.body = json.dumps({

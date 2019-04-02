@@ -8,7 +8,7 @@ from state import robotstate
 
 Xm = LargeMotor(OUTPUT_A)
 Ym = LargeMotor(OUTPUT_B)
-Zm = MediumMotor(OUTPUT_C)
+Zm = LargeMotor(OUTPUT_C)
 Gm = MediumMotor(OUTPUT_D)
 
 class PositionResource(object):
@@ -48,9 +48,9 @@ class PositionResource(object):
         print("Moving gantry to {},{},{}.".format(targetX, targetY, targetZ))
         print(json.dumps(robotstate))
 
-        Xm.on_to_position(20, targetX * robotstate['Xmul'], block=False)
-        Ym.on_to_position(20, targetY * robotstate['Ymul'], block=False)
-        Zm.on_to_position(20, targetZ * robotstate['Zmul'], block=False)
+        Xm.on_to_position(80, targetX * robotstate['Xmul'], block=False)
+        Ym.on_to_position(60, targetY * robotstate['Ymul'], block=False)
+        Zm.on_to_position(90, targetZ * robotstate['Zmul'], block=False)
 
         Xm.wait_while('running', timeout=4000)
         Ym.wait_while('running', timeout=4000)

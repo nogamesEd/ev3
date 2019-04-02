@@ -37,14 +37,15 @@ class InitResource(object):
             limit switches and return to home position. Request completes 
             when finished."""
 
-        moveTo(Xm, 50, "Xmul", 80)
-        Sound.beep()
+        moveTo(Xm, 50, "Xmul", 60)
+
+Sound.beep
 
         # Z axis initialisation
         print('Initialising robot Z axis:')
         
         # move to where it thinks 0 is
-        moveTo(Zm, 0, "Zmul", 90)
+        moveTo(Zm, 0, "Zmul", 60)
         
         # Zm.reset() # Reset in order to release breaks
         Sound.beep()
@@ -60,7 +61,7 @@ class InitResource(object):
         Zm.reset()
 
         # move to where it thinks 100 is
-        moveTo(Zm, 100, "Zmul", 90)
+        moveTo(Zm, 100, "Zmul", 60)
         
         Sound.beep()
         while not Btn.enter:
@@ -76,7 +77,7 @@ class InitResource(object):
         print('Z axis length is ' + str(Zm.position))
 
         robotstate['Zmul'] = Zm.position/robotstate['Zlength']
-        moveTo(Zm, 100, "Zmul", 90)
+        moveTo(Zm, 100, "Zmul", 60)
 
         # X axis initialisation
         print("Initialising robot X axis:")
@@ -107,80 +108,77 @@ class InitResource(object):
                 Xm.run_timed(time_sp=50, speed_sp=X_SPEED)
         while Btn.enter:
             pass
-        Sound.beep()
-
         print('X axis track length is ' + str(Xm.position))
         robotstate['Xmul'] = Xm.position / robotstate['Xlength']
         moveTo(Xm, 50, "Xmul", 80)
 
         # Y axis initialisation
 
-        # move to where it thinks 100 is
-        moveTo(Ym, 100, "Ymul", 60)
+        # move to where it thinks 0 is
+        moveTo(Ym, 0, "Ymul", 60)
 
         print('Initialising robot Y axis:')
         # Ym.reset() # Reset in order to release breaks
         Sound.beep()
         while not Btn.enter:
             if Btn.up:
-                Ym.run_timed(time_sp=50, speed_sp=(-1 * Y_SPEED))
+                Ym.run_timed(time_sp=50, speed_sp=(-1 * Y_SPEED)/3)
             elif Btn.down:
-                Ym.run_timed(time_sp=50, speed_sp=(Y_SPEED)/3)
+                Ym.run_timed(time_sp=50, speed_sp=(Y_SPEED))
         while Btn.enter:
             pass
         Sound.beep()
 
         Ym.reset()
 
-        # move to where it thinks 0 is
-        moveTo(Ym, -100, "Ymul", 60)
+        # move to where it thinks 100 is
+        moveTo(Ym, 100, "Ymul", 60)
 
         Sound.beep()
         while not Btn.enter:
             if Btn.up:
-                Ym.run_timed(time_sp=50, speed_sp=(-1 * Y_SPEED)/3)
+                Ym.run_timed(time_sp=50, speed_sp=(-1 * Y_SPEED))
             elif Btn.down:
-                Ym.run_timed(time_sp=50, speed_sp=Y_SPEED)
+                Ym.run_timed(time_sp=50, speed_sp=Y_SPEED/3)
         while Btn.enter:
             pass
         Sound.beep()
 
         print('Y axis track length is ' + str(Ym.position))
-        robotstate['Ymul'] = -1 * Ym.position / robotstate['Ylength']
-        Ym.reset()
+        robotstate['Ymul'] = Ym.position/robotstate['Ylength']
+        Ym.on_to_position(80, int(Ym.position/2))
         moveTo(Ym, 50, "Ymul", 60)
 
         # Gripper initialisation
-        moveTo(Gm, 100, "Gmul", 40)
+        # moveTo(Gm, 0, "Gmul", 40)
         print('Initialising the gripper:')
         Sound.beep()
         while not Btn.enter:
             if Btn.up:
-                Gm.run_timed(time_sp=50, speed_sp=G_SPEED)
-            elif Btn.down:
-                Gm.run_timed(time_sp=50, speed_sp=(-1 * G_SPEED)/3)
-        while Btn.enter:
-            pass
-        Sound.beep()
-
-        Gm.reset()
-
-        moveTo(Gm, -100, "Gmul", 40)
-
-        Sound.beep()
-        while not Btn.enter:
-            if Btn.up:
-                Gm.run_timed(time_sp=50, speed_sp=G_SPEED/3)
+                Gm.run_timed(time_sp=50, speed_sp=G_SPEED/2)
             elif Btn.down:
                 Gm.run_timed(time_sp=50, speed_sp=(-1 * G_SPEED))
         while Btn.enter:
             pass
         Sound.beep()
 
-        print("G axis length is " + str(Gm.position))
-        robotstate['Gmul'] = -1 * Gm.position / robotstate['Glength']
         Gm.reset()
-        #moveTo(Gm, 0, "Gmul", 40)
+
+        # moveTo(Gm, 100, "Gmul", 40)
+
+        Sound.beep()
+        while not Btn.enter:
+            if Btn.up:
+                Gm.run_timed(time_sp=50, speed_sp=G_SPEED)
+            elif Btn.down:
+                Gm.run_timed(time_sp=50, speed_sp=(-1 * G_SPEED)/2)
+        while Btn.enter:
+            pass
+        Sound.beep()
+
+        print("G axis length is " + str(Gm.position))
+        robotstate['Gmul'] = Gm.position/robotstate['Glength']
+        moveTo(Gm, 0, "Gmul", 40)
 
         robotstate['initialised'] = True
 

@@ -6,6 +6,7 @@
 import bjoern
 from ipaddress import ip_address
 from app import HardwareAPI
+from ev3dev.ev3 import Sound
  
 wsgi_app = HardwareAPI
  
@@ -29,4 +30,5 @@ if __name__ == '__main__':
             port = 8000
         ip = str(ip)
         print("Starting server on {}:{}".format(ip, port))
+        Sound.beep()
         bjoern.run(wsgi_app, ip, port)
